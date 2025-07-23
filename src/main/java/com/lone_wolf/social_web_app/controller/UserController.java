@@ -34,6 +34,13 @@ public class UserController {
 //        return userService.findUserByEmail(email);
 //    }
 
+    @GetMapping("/api/users/profile")
+    public User getUserFromToken(@RequestHeader("Authorization") String jwt) {
+        User user = userService.findUserByJwt(jwt);
+        user.setPassword(null);
+        return user;
+    }
+
     @PutMapping("/api/users")
     public User updateUser(@RequestHeader("Authorization") String jwt, @RequestBody User updatedUser) throws UserException {
         User reqUser = userService.findUserByJwt(jwt);
@@ -49,14 +56,8 @@ public class UserController {
     }
 
     @GetMapping("/api/users/search")
-    public List<User> searchUser(@RequestParam String query){
+    public List<User> searchUser(@RequestParam String query) {
         return userService.searchUser(query);
     }
 
-    @GetMapping("/api/users/profile")
-    public User getUserFromToken(@RequestHeader("Authorization") String jwt) {
-        User user = userService.findUserByJwt(jwt);
-        user.setPassword(null);
-        return user;
-    }
 }
